@@ -3,10 +3,11 @@ import api from "../services/api";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const fetchCourses = async () => {
     try{
-      const response = await api.get("courses/");
+      const response = await api.get(`courses/?search=${searchTerm}`);
 
       setCourses(response.data.results);
 
@@ -21,11 +22,23 @@ function Courses() {
   };
   useEffect(()=> {
     fetchCourses();
-  },[]);
+  },[searchTerm]);
+
+  console.log(searchTerm);
 
   return (
   <div className="container mt-5">
     <h2 className="mb-4">Courses</h2>
+
+    {/*Search Box */}
+    <div className="mb-4">
+     <input type="text"
+  className="form-control"
+  placeholder="🔍 Search Courses..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}/>
+    </div>
+
 
     <div className="row">
       {courses.map((course) => (
