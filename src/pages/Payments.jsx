@@ -40,6 +40,13 @@ function Payments() {
                 </p>
                 <p><strong>Course ID:</strong>{payment.course}
                 </p>
+                <p>
+                  <strong>Status:</strong>{" "}
+                  <span className={`badge ${
+                    payment.payment_status === "PAID"
+                    ? "bg-success"
+                    : "bg-danger"
+                  }`}>{payment.payment_status}</span></p>
               </div>
             </div>
           </div>
