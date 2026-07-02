@@ -4,25 +4,27 @@ import api from "../services/api";
 function Courses() {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const fetchCourses = async () => {
+  const fetchCourses = async()=> {
     try{
-      const response = await api.get(`courses/?search=${searchTerm}`);
-
+      const url = searchTerm
+      ? `courses/?search=${searchTerm}`
+      : "courses/";
+      const response = await api.get(url);
       setCourses(response.data.results);
-
     } catch (error) {
       console.log(error);
-      if (error.response) {
-        console.log("Response:" ,error.response.status);
-        console.log("Status:",error.response.status);
-        console.log("Data:",error.response.data);
-      }
     }
+    
   };
-  useEffect(()=> {
+ useEffect(() => {
+  const timer = setTimeout(() => {
     fetchCourses();
-  },[searchTerm]);
+  }, 500);
+
+  return () => {
+    clearTimeout(timer);
+  };
+}, [searchTerm]);
 
   console.log(searchTerm);
 
