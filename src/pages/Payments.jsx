@@ -1,57 +1,123 @@
 import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import api from "../services/api";
 
 function Payments() {
   const [payments, setPayments] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [ordering, setOrdering] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const fetchPayments = async () => {
+    setLoading(true);
+
     try {
-      const response = await api.get("payments/");
+      let url = "payments/?";
 
-      console.log(response.data);
+      if (searchTerm) {
+        url += `search=${searchTerm}&`;
+      }
 
+      if (ordering) {
+        url += `ordering=${ordering}`;
+      }
+
+      const response = await api.get(url);
       setPayments(response.data.results);
+
     } catch (error) {
       console.log(error);
+
+      if (error.response) {
+        console.log("Status:", error.response.status);
+        console.log("Data:", error.response.data);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPayments();
-  }, []);
+    const timer = setTimeout(() => {
+      fetchPayments();
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm, ordering]);
 
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Payments</h2>
-      <div className="row">
-        {payments.map((payment)=>(
-          <div className="col-md-4 mb-4" key={payment.id}>
-            <div className="card shadow-sm h-100">
-              <div className="card-body">
-                <h5 className="card-title">
-                  Transaction: {payment.transaction_id}
-                </h5>
-                <p><strong>Amount:</strong>₹{payment.amount}
-                </p>
-                <p><strong>Status:</strong>{payment.payment_status}
-                </p>
-                <p><strong>Date:</strong>{" "}
-                {payment.payment_date.substring(0,10)}
-                </p>
-                <p><strong>Course ID:</strong>{payment.course}
-                </p>
-                <p>
-                  <strong>Status:</strong>{" "}
-                  <span className={`badge ${
-                    payment.payment_status === "PAID"
-                    ? "bg-success"
-                    : "bg-danger"
-                  }`}>{payment.payment_status}</span></p>
-              </div>
-            </div>
-          </div>
-        ))}
+
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="🔍 Search Payments..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
+
+      <div className="mb-4">
+        <select
+          className="form-select"
+          value={ordering}
+          onChange={(e) => setOrdering(e.target.value)}
+        >
+          <option value="">Sort By</option>
+          <option value="amount">Amount (Low to High)</option>
+          <option value="-amount">Amount (High to Low)</option>
+          <option value="payment_date">Payment Date (Oldest First)</option>
+          <option value="-payment_date">Payment Date (Newest First)</option>
+        </select>
+      </div>
+
+      {loading ? (
+        <div className="d-flex justify-content-center align-items-center" style={{ height: "300px" }}>
+          <div className="text-center">
+            <Spinner animation="border" variant="primary" />
+            <p className="mt-3">Loading Payments...</p>
+          </div>
+        </div>
+      ) : (
+        <div className="row">
+          {payments.length > 0 ? (
+            payments.map((payment) => (
+              <div className="col-md-4 mb-4" key={payment.id}>
+                <div className="card shadow-sm h-100">
+                  <div className="card-body">
+                    <h5 className="card-title">
+                      Transaction: {payment.transaction_id}
+                    </h5>
+
+                    <p><strong>Amount:</strong> ₹{payment.amount}</p>
+
+                    <p><strong>Date:</strong> {payment.payment_date.substring(0,10)}</p>
+
+                    <p><strong>Course ID:</strong> {payment.course}</p>
+
+                    <p>
+                      <strong>Status:</strong>{" "}
+                      <span className={`badge ${
+                        payment.payment_status === "PAID"
+                          ? "bg-success"
+                          : "bg-danger"
+                      }`}>
+                        {payment.payment_status}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="text-center">
+              <h5>No Payments Found</h5>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
