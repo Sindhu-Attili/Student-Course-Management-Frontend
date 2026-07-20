@@ -6,13 +6,19 @@ function Certificates() {
   const [certificates, setCertificates] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [ordering, setOrdering] = useState("");
+
   const [loading, setLoading] = useState(true);
+
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
+  const [nextPage, setNextPage] = useState(null);
+  const [previousPage, setPreviousPage] = useState(null);
 
   const fetchCertificates = async () => {
     setLoading(true);
 
     try {
-      let url = "certificates/?";
+      let url = `certificates/?page=${page}&`;
 
       if (searchTerm) {
         url += `search=${searchTerm}&`;
@@ -23,7 +29,11 @@ function Certificates() {
       }
 
       const response = await api.get(url);
+
       setCertificates(response.data.results);
+      setCount(response.data.count);
+      setNextPage(response.data.next);
+      setPreviousPage(response.data.previous);
 
     } catch (error) {
       console.log(error);
@@ -43,71 +53,132 @@ function Certificates() {
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [searchTerm, ordering]);
+  }, [searchTerm, ordering, page]);
+
+  const totalPages = Math.ceil(count / 5);
 
   return (
     <div className="container mt-5">
+
       <h2 className="text-center mb-4">Certificates</h2>
 
+      {/* Search */}
       <div className="mb-3">
         <input
           type="text"
           className="form-control"
           placeholder="🔍 Search Certificates..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setPage(1);
+          }}
         />
       </div>
 
+      {/* Sorting */}
       <div className="mb-4">
         <select
           className="form-select"
           value={ordering}
-          onChange={(e) => setOrdering(e.target.value)}
+          onChange={(e) => {
+            setOrdering(e.target.value);
+            setPage(1);
+          }}
         >
           <option value="">Sort By</option>
           <option value="issued_at">Issued Date (Oldest First)</option>
           <option value="-issued_at">Issued Date (Newest First)</option>
-          <option value="certificate_number">Certificate No (Ascending)</option>
-          <option value="-certificate_number">Certificate No (Descending)</option>
+          <option value="certificate_number">
+            Certificate No (Ascending)
+          </option>
+          <option value="-certificate_number">
+            Certificate No (Descending)
+          </option>
         </select>
       </div>
 
+      {/* Loading */}
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center" style={{ height: "300px" }}>
+        <div
+          className="d-flex justify-content-center align-items-center"
+          style={{ height: "300px" }}
+        >
           <div className="text-center">
             <Spinner animation="border" variant="primary" />
             <p className="mt-3">Loading Certificates...</p>
           </div>
         </div>
       ) : (
-        <div className="row">
-          {certificates.length > 0 ? (
-            certificates.map((certificate) => (
-              <div className="col-md-4 mb-4" key={certificate.id}>
-                <div className="card shadow-sm h-100">
-                  <div className="card-body">
-                    <h5 className="card-title text-center">
-                      🏆 Certificate
-                    </h5>
+        <>
+          {/* Certificate Cards */}
+          <div className="row">
+            {certificates.length > 0 ? (
+              certificates.map((certificate) => (
+                <div className="col-md-4 mb-4" key={certificate.id}>
+                  <div className="card shadow-sm h-100">
+                    <div className="card-body">
 
-                    <p><strong>Certificate No:</strong> {certificate.certificate_number}</p>
+                      <h5 className="card-title text-center">
+                        🏆 Certificate
+                      </h5>
 
-                    <p><strong>Issued Date:</strong> {certificate.issued_at.substring(0,10)}</p>
+                      <p>
+                        <strong>Certificate No:</strong>{" "}
+                        {certificate.certificate_number}
+                      </p>
 
-                    <p><strong>Student ID:</strong> {certificate.student}</p>
+                      <p>
+                        <strong>Issued Date:</strong>{" "}
+                        {certificate.issued_at.substring(0, 10)}
+                      </p>
 
-                    <p><strong>Course ID:</strong> {certificate.course}</p>
+                      <p>
+                        <strong>Student ID:</strong> {certificate.student}
+                      </p>
+
+                      <p>
+                        <strong>Course ID:</strong> {certificate.course}
+                      </p>
+
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="text-center">
+                <h5>No Certificates Found</h5>
               </div>
-            ))
-          ) : (
-            <div className="text-center">
-              <h5>No Certificates Found</h5>
+            )}
+          </div>
+
+          {/* Pagination */}
+          {certificates.length > 0 && (
+            <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
+
+              <button
+                className="btn btn-outline-primary"
+                disabled={!previousPage}
+                onClick={() => setPage(page - 1)}
+              >
+                ◀ Previous
+              </button>
+
+              <strong>
+                Page {page} of {totalPages}
+              </strong>
+
+              <button
+                className="btn btn-outline-primary"
+                disabled={!nextPage}
+                onClick={() => setPage(page + 1)}
+              >
+                Next ▶
+              </button>
+
             </div>
           )}
-        </div>
+        </>
       )}
     </div>
   );
