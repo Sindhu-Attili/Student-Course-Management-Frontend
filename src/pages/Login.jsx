@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import api from "../services/api";
 
 function Login() {
@@ -8,29 +9,34 @@ function Login() {
 
   const navigate = useNavigate();
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const response = await api.post("token/", {
-      username: username,
-      password: password,
-      
-    });
+    try {
+      const response = await api.post("token/", {
+        username,
+        password,
+      });
 
-    console.log(response.data);
-    localStorage.setItem("access",response.data.access);
-    localStorage.setItem("refresh",response.data.refresh);
-    
-    navigate("/dashboard");
+      localStorage.setItem("access", response.data.access);
+      localStorage.setItem("refresh", response.data.refresh);
 
-    console.log("Token Saved Successfully");
+      toast.success("Welcome back! Login successful 🎉");
 
-  } catch (error) {
-    console.log(error.response.data);
-    
-  }
-};
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
+
+    } catch (error) {
+      if (error.response?.status === 401) {
+        toast.error("Invalid username or password.");
+      } else {
+        toast.error("Something went wrong. Please try again.");
+      }
+
+      console.error(error);
+    }
+  };
 
   return (
     <div className="container mt-5">
@@ -43,24 +49,30 @@ function Login() {
 
             <div className="mb-3">
               <label className="form-label">Username</label>
+
               <input
                 type="text"
                 className="form-control"
                 placeholder="Enter username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required
               />
+
             </div>
 
             <div className="mb-3">
               <label className="form-label">Password</label>
+
               <input
                 type="password"
                 className="form-control"
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
+
             </div>
 
             <button
