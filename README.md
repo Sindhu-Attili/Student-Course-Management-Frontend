@@ -1,66 +1,89 @@
 # 🎓 Student Course Management System - Frontend
 
-A modern React.js frontend application for the **Student Course Management System**. This application provides students with a clean and responsive interface to securely access courses, assignments, payments, and certificates by communicating with a Django REST Framework backend using JWT Authentication.
+A modern and responsive frontend for the **Student Course Management System**, built using **React** and **Vite**. The application provides a clean user interface for managing courses, assignments, payments, certificates, and dashboard analytics with secure JWT authentication.
 
 ---
 
-## 🚀 Features
+## 📸 Application Screenshots
+
+### 🔐 Login Page
+
+![Login](Screenshots/login-page.png)
+
+---
+
+### 📊 Dashboard
+
+![Dashboard](Screenshots/dashboard.png)
+
+---
+
+### 📚 Courses
+
+![Courses](Screenshots/courses.png)
+
+---
+
+### 📝 Assignments
+
+![Assignments](Screenshots/assignments.png)
+
+---
+
+### 💳 Payments
+
+![Payments](Screenshots/payments.png)
+
+---
+
+### 🏆 Certificates
+
+![Certificates](Screenshots/certificates.png)
+
+---
+
+## ✨ Features
 
 - 🔐 JWT Authentication
-- 🛡️ Protected Routes
-- 📊 Student Dashboard
-- 📚 View Available Courses
-- 📝 View Assignments
-- 💳 View Payments
-- 🏆 View Certificates
-- 🌐 REST API Integration using Axios
-- ⚡ React Router Navigation
-- 🎨 Responsive UI with Bootstrap
+- 🛡 Protected Routes
+- 📊 Dashboard Statistics
+- 📚 Course Management
+- 📝 Assignment Management
+- 💳 Payment Management
+- 🏆 Certificate Management
+- 🔍 Search Functionality
+- 📑 Sorting
+- 📄 Pagination
+- 📱 Responsive Design
+- 🎨 Modern UI
+- ♻️ Reusable Components
+- 🔔 Toast Notifications
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-### Frontend
-
-- React.js
-- Vite
-- React Router DOM
-- Axios
-- Bootstrap 5
-- JavaScript (ES6+)
-- HTML5
-- CSS3
-
-### Backend
-
-- Django
-- Django REST Framework
-- Simple JWT
-- MySQL
+| Technology | Purpose |
+|------------|---------|
+| React | Frontend Library |
+| Vite | Build Tool |
+| React Router DOM | Routing |
+| Axios | API Communication |
+| Bootstrap 5 | UI Components |
+| Bootstrap Icons | Icons |
+| React Toastify | Notifications |
 
 ---
 
-## 📂 Project Structure
+## 📁 Folder Structure
 
-```
+```text
 src/
 │
-├── assets/
-│
 ├── components/
-│   └── ProtectedRoute.jsx
-│
 ├── pages/
-│   ├── Login.jsx
-│   ├── Dashboard.jsx
-│   ├── Courses.jsx
-│   ├── Assignments.jsx
-│   ├── Payments.jsx
-│   └── Certificates.jsx
-│
 ├── services/
-│   └── api.js
+├── styles/
 │
 ├── App.jsx
 ├── main.jsx
@@ -69,65 +92,12 @@ src/
 
 ---
 
-## 🔄 Application Flow
-
-```
-User Login
-      │
-      ▼
-JWT Authentication
-      │
-      ▼
-Access Token Stored in Local Storage
-      │
-      ▼
-Protected Dashboard
-      │
-      ├──────────────┐
-      ▼              ▼
-Courses        Assignments
-      │              │
-      ▼              ▼
-Payments     Certificates
-```
-
----
-
-## 📸 Modules Completed
-
-- ✅ Login
-- ✅ JWT Authentication
-- ✅ Protected Routes
-- ✅ Dashboard
-- ✅ Courses
-- ✅ Assignments
-- ✅ Payments
-- ✅ Certificates
-
----
-
-## 🔗 Backend Repository
-
-This frontend communicates with the Django REST API backend.
-
-➡️ **Backend Repository:**
-
-https://github.com/Sindhu-Attili/Student-Course-Management-System
-
----
-
 ## 🚀 Getting Started
 
 ### Clone the repository
 
 ```bash
-git clone https://github.com/Sindhu-Attili/Student-Course-Management-Frontend.git
-```
-
-### Navigate into the project
-
-```bash
-cd Student-Course-Management-Frontend
+git clone <your-frontend-repository-url>
 ```
 
 ### Install dependencies
@@ -136,64 +106,63 @@ cd Student-Course-Management-Frontend
 npm install
 ```
 
-### Start the development server
+### Start development server
 
 ```bash
 npm run dev
 ```
 
-The application will start at:
+---
 
-```
-http://localhost:5173
-```
+## 🔐 Authentication
+
+The application uses **JWT Authentication**.
+
+After successful login:
+
+- Access Token is stored in Local Storage
+- Refresh Token is stored in Local Storage
+- Protected Routes prevent unauthorized access
 
 ---
 
-## 📦 API Configuration
+## 📦 Modules
 
-The frontend communicates with the Django backend using Axios.
-
-Default API Base URL:
-
-```javascript
-http://127.0.0.1:8000/api/
-```
-
----
-
-## 📌 Project Status
-
-🚧 **Currently Under Development**
-
-Completed:
-
-- Authentication
+- Login
 - Dashboard
-- Courses Module
-- Assignments Module
-- Payments Module
-- Certificates Module
+- Courses
+- Assignments
+- Payments
+- Certificates
 
-Upcoming:
+---
 
-- Dashboard Statistics
-- Search Functionality
-- Filtering & Sorting
-- Student Profile
-- UI Enhancements
-- Responsive Improvements
-- Deployment
+## 🎨 UI Highlights
+
+- Modern Login Screen
+- Gradient Background
+- Dashboard Cards
+- Responsive Sidebar
+- Search & Sorting
+- Pagination
+- Smooth Hover Effects
+- Consistent Card Design
+
+---
+
+## 🔮 Future Enhancements
+
+- User Profile
+- Profile Picture Upload
+- Dark Mode
+- Charts & Analytics
+- Notifications
+- Role-Based Authentication
 
 ---
 
 ## 👨‍💻 Author
 
-**Sindhu Attili**
+**Satya Sindhu**
 
-GitHub:
-https://github.com/Sindhu-Attili
-
----
-
-⭐ If you found this project useful, feel free to star the repository!
+Python Full Stack Developer
