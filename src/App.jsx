@@ -7,20 +7,27 @@ import Courses from "./pages/Courses";
 import Assignments from "./pages/Assignments";
 import Payments from "./pages/Payments";
 import Certificates from "./pages/Certificates";
+
 import ProtectedRoute from "./components/ProtectedRoute";
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <BrowserRouter>
 
       <Routes>
+
+        {/* Public Route */}
         <Route path="/" element={<Login />} />
 
+        {/* Protected Routes */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Layout>
+                <Dashboard />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -29,7 +36,9 @@ function App() {
           path="/courses"
           element={
             <ProtectedRoute>
-              <Courses />
+              <Layout>
+                <Courses />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -38,7 +47,9 @@ function App() {
           path="/assignments"
           element={
             <ProtectedRoute>
-              <Assignments />
+              <Layout>
+                <Assignments />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -47,7 +58,9 @@ function App() {
           path="/payments"
           element={
             <ProtectedRoute>
-              <Payments />
+              <Layout>
+                <Payments />
+              </Layout>
             </ProtectedRoute>
           }
         />
@@ -56,18 +69,20 @@ function App() {
           path="/certificates"
           element={
             <ProtectedRoute>
-              <Certificates />
+              <Layout>
+                <Certificates />
+              </Layout>
             </ProtectedRoute>
           }
         />
+
       </Routes>
 
-      {/* Toast Notifications */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
         hideProgressBar={false}
-        newestOnTop={true}
+        newestOnTop
         closeOnClick
         pauseOnHover
         draggable

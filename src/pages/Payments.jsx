@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
 import api from "../services/api";
+
+import PageHeader from "../components/PageHeader";
+import SearchBar from "../components/SearchBar";
+import LoadingSpinner from "../components/LoadingSpinner";
+import EmptyState from "../components/EmptyState";
+import PaginationControls from "../components/PaginationControls";
 
 function Payments() {
   const [payments, setPayments] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [ordering, setOrdering] = useState("");
-
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
@@ -34,14 +38,8 @@ function Payments() {
       setCount(response.data.count);
       setNextPage(response.data.next);
       setPreviousPage(response.data.previous);
-
     } catch (error) {
       console.log(error);
-
-      if (error.response) {
-        console.log("Status:", error.response.status);
-        console.log("Data:", error.response.data);
-      }
     } finally {
       setLoading(false);
     }
@@ -58,132 +56,142 @@ function Payments() {
   const totalPages = Math.ceil(count / 5);
 
   return (
-    <div className="container mt-5">
+    <div className="container-fluid p-4">
 
-      <h2 className="text-center mb-4">Payments</h2>
+      <PageHeader
+        title="Payments"
+        subtitle="Manage student payment records."
+        icon="bi-credit-card"
+      />
 
-      {/* Search */}
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="🔍 Search Payments..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setPage(1);
-          }}
-        />
-      </div>
+      {/* Search & Sort */}
+      <div className="card shadow-sm border-0 rounded-4 mb-4">
+        <div className="card-body">
 
-      {/* Sort */}
-      <div className="mb-4">
-        <select
-          className="form-select"
-          value={ordering}
-          onChange={(e) => {
-            setOrdering(e.target.value);
-            setPage(1);
-          }}
-        >
-          <option value="">Sort By</option>
-          <option value="amount">Amount (Low to High)</option>
-          <option value="-amount">Amount (High to Low)</option>
-          <option value="payment_date">Payment Date (Oldest First)</option>
-          <option value="-payment_date">Payment Date (Newest First)</option>
-        </select>
-      </div>
+          <div className="row g-3">
 
-      {/* Loading */}
-      {loading ? (
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{ height: "300px" }}
-        >
-          <div className="text-center">
-            <Spinner animation="border" variant="primary" />
-            <p className="mt-3">Loading Payments...</p>
+            <div className="col-md-8">
+              <SearchBar
+                value={searchTerm}
+                placeholder="Search Payments..."
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPage(1);
+                }}
+              />
+            </div>
+
+            <div className="col-md-4">
+              <select
+                className="form-select"
+                style={{ height: "50px" }}
+                value={ordering}
+                onChange={(e) => {
+                  setOrdering(e.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value="">Sort By</option>
+                <option value="amount">Amount (Low to High)</option>
+                <option value="-amount">Amount (High to Low)</option>
+                <option value="payment_date">
+                  Payment Date (Oldest First)
+                </option>
+                <option value="-payment_date">
+                  Payment Date (Newest First)
+                </option>
+              </select>
+            </div>
+
           </div>
+
         </div>
-      ) : (
-        <>
-          {/* Payment Cards */}
-          <div className="row">
-            {payments.length > 0 ? (
-              payments.map((payment) => (
-                <div className="col-md-4 mb-4" key={payment.id}>
-                  <div className="card shadow-sm h-100">
-                    <div className="card-body">
+      </div>
 
-                      <h5 className="card-title">
-                        Transaction: {payment.transaction_id}
-                      </h5>
+      {/* Payment Cards */}
+      <div className="card shadow-sm border-0 rounded-4">
+        <div className="card-body">
 
-                      <p>
-                        <strong>Amount:</strong> ₹{payment.amount}
-                      </p>
+          {loading ? (
+            <LoadingSpinner text="Loading Payments..." />
+          ) : payments.length === 0 ? (
+            <EmptyState
+              icon="bi-credit-card"
+              title="No Payments Found"
+              message="Try changing your search or sorting options."
+            />
+          ) : (
+            <>
+              <div className="row">
 
-                      <p>
-                        <strong>Date:</strong>{" "}
-                        {payment.payment_date.substring(0, 10)}
-                      </p>
+                {payments.map((payment) => (
+                  <div
+                    className="col-lg-4 col-md-6 mb-4"
+                    key={payment.id}
+                  >
+                    <div className="card border-0 shadow-sm h-100 rounded-4 course-card">
 
-                      <p>
-                        <strong>Course ID:</strong> {payment.course}
-                      </p>
+                      <div className="card-body">
 
-                      <p>
-                        <strong>Status:</strong>{" "}
-                        <span
-                          className={`badge ${
-                            payment.payment_status === "PAID"
-                              ? "bg-success"
-                              : "bg-danger"
-                          }`}
-                        >
-                          {payment.payment_status}
-                        </span>
-                      </p>
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+
+                          <h6 className="fw-bold mb-0">
+                            #{payment.transaction_id}
+                          </h6>
+
+                          <span
+                            className={`badge ${
+                              payment.payment_status === "PAID"
+                                ? "bg-success"
+                                : "bg-danger"
+                            }`}
+                          >
+                            {payment.payment_status}
+                          </span>
+
+                        </div>
+
+                        <hr />
+
+                        <p className="mb-2">
+                          <i className="bi bi-currency-rupee me-2 text-success"></i>
+                          <strong>Amount:</strong> ₹{payment.amount}
+                        </p>
+
+                        <p className="mb-2">
+                          <i className="bi bi-calendar-event me-2 text-primary"></i>
+                          <strong>Date:</strong>{" "}
+                          {payment.payment_date.substring(0, 10)}
+                        </p>
+
+                        <p className="mb-0">
+                          <i className="bi bi-book me-2 text-warning"></i>
+                          <strong>Course ID:</strong> {payment.course}
+                        </p>
+
+                      </div>
 
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-center">
-                <h5>No Payments Found</h5>
+                ))}
+
               </div>
-            )}
-          </div>
 
-          {/* Pagination */}
-          {payments.length > 0 && (
-            <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
+              <PaginationControls
+                page={page}
+                totalPages={totalPages}
+                previousPage={previousPage}
+                nextPage={nextPage}
+                onPrevious={() => setPage(page - 1)}
+                onNext={() => setPage(page + 1)}
+              />
 
-              <button
-                className="btn btn-outline-primary"
-                disabled={!previousPage}
-                onClick={() => setPage(page - 1)}
-              >
-                ◀ Previous
-              </button>
-
-              <strong>
-                Page {page} of {totalPages}
-              </strong>
-
-              <button
-                className="btn btn-outline-primary"
-                disabled={!nextPage}
-                onClick={() => setPage(page + 1)}
-              >
-                Next ▶
-              </button>
-
-            </div>
+            </>
           )}
-        </>
-      )}
+
+        </div>
+      </div>
+
     </div>
   );
 }

@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
 import api from "../services/api";
+
+import PageHeader from "../components/PageHeader";
+import SearchBar from "../components/SearchBar";
+import LoadingSpinner from "../components/LoadingSpinner";
+import EmptyState from "../components/EmptyState";
+import PaginationControls from "../components/PaginationControls";
 
 function Courses() {
   const [courses, setCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [ordering, setOrdering] = useState("");
-
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
@@ -34,14 +38,8 @@ function Courses() {
       setCount(response.data.count);
       setNextPage(response.data.next);
       setPreviousPage(response.data.previous);
-
     } catch (error) {
       console.log(error);
-
-      if (error.response) {
-        console.log("Status:", error.response.status);
-        console.log("Data:", error.response.data);
-      }
     } finally {
       setLoading(false);
     }
@@ -55,114 +53,132 @@ function Courses() {
     return () => clearTimeout(timer);
   }, [searchTerm, ordering, page]);
 
-  // Total pages
   const totalPages = Math.ceil(count / 5);
 
   return (
-    <div className="container mt-5">
+    <div className="container-fluid p-4">
 
-      <h2 className="text-center mb-4">Courses</h2>
+      <PageHeader
+        title="Courses"
+        subtitle="Manage all available courses."
+        icon="bi-book"
+      />
 
-      {/* Search */}
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="🔍 Search Courses..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setPage(1);
-          }}
-        />
-      </div>
+      {/* Search & Sort Card */}
+      <div className="card shadow-sm border-0 rounded-4 mb-4">
+        <div className="card-body">
 
-      {/* Sorting */}
-      <div className="mb-4">
-        <select
-          className="form-select"
-          value={ordering}
-          onChange={(e) => {
-            setOrdering(e.target.value);
-            setPage(1);
-          }}
-        >
-          <option value="">Sort By</option>
-          <option value="fee">Fee (Low to High)</option>
-          <option value="-fee">Fee (High to Low)</option>
-          <option value="duration">Duration (Low to High)</option>
-          <option value="-duration">Duration (High to Low)</option>
-        </select>
-      </div>
+          <div className="row g-3">
 
-      {/* Loading */}
-      {loading ? (
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{ height: "300px" }}
-        >
-          <div className="text-center">
-            <Spinner animation="border" variant="primary" />
-            <p className="mt-3">Loading Courses...</p>
-          </div>
-        </div>
-      ) : (
-        <>
-          {/* Course Cards */}
-          <div className="row">
-            {courses.length > 0 ? (
-              courses.map((course) => (
-                <div className="col-md-4 mb-4" key={course.id}>
-                  <div className="card shadow-sm h-100">
-                    <div className="card-body text-center">
-                      <h4>{course.course_name}</h4>
-
-                      <p>
-                        <strong>Duration:</strong> {course.duration} Days
-                      </p>
-
-                      <p>
-                        <strong>Fee:</strong> ₹{course.fee}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-center">
-                <h5>No Courses Found</h5>
-              </div>
-            )}
-          </div>
-
-          {/* Pagination */}
-          {courses.length > 0 && (
-            <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
-
-              <button
-                className="btn btn-outline-primary"
-                disabled={!previousPage}
-                onClick={() => setPage(page - 1)}
-              >
-                ◀ Previous
-              </button>
-
-              <strong>
-                Page {page} of {totalPages}
-              </strong>
-
-              <button
-                className="btn btn-outline-primary"
-                disabled={!nextPage}
-                onClick={() => setPage(page + 1)}
-              >
-                Next ▶
-              </button>
-
+            <div className="col-md-8">
+              <SearchBar
+                value={searchTerm}
+                placeholder="Search Courses..."
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPage(1);
+                }}
+              />
             </div>
+
+            <div className="col-md-4">
+              <select
+                className="form-select"
+                style={{ height: "50px" }}
+                value={ordering}
+                onChange={(e) => {
+                  setOrdering(e.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value="">Sort By</option>
+                <option value="fee">Fee (Low to High)</option>
+                <option value="-fee">Fee (High to Low)</option>
+                <option value="duration">Duration (Low to High)</option>
+                <option value="-duration">Duration (High to Low)</option>
+              </select>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      {/* Course List Card */}
+      <div className="card shadow-sm border-0 rounded-4">
+
+        <div className="card-body">
+
+          {loading ? (
+            <LoadingSpinner text="Loading Courses..." />
+          ) : courses.length === 0 ? (
+            <EmptyState
+              icon="bi-book"
+              title="No Courses Found"
+              message="Try changing your search or sorting options."
+            />
+          ) : (
+            <>
+              <div className="row">
+
+                {courses.map((course) => (
+                  <div className="col-lg-4 col-md-6 mb-4" key={course.id}>
+
+                    <div className="card border-0 shadow-sm h-100 rounded-4">
+
+                      <div className="card-body">
+
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+
+                          <h5 className="fw-bold mb-0">
+                            {course.course_name}
+                          </h5>
+
+                          <span className="badge bg-primary">
+                            Active
+                          </span>
+
+                        </div>
+
+                        <hr />
+
+                        <p className="mb-2">
+                          <i className="bi bi-clock me-2 text-primary"></i>
+
+                          <strong>Duration:</strong>{" "}
+                          {course.duration} Days
+                        </p>
+
+                        <p className="mb-0">
+                          <i className="bi bi-currency-rupee me-2 text-success"></i>
+
+                          <strong>Fee:</strong> ₹{course.fee}
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
+
+              <PaginationControls
+                page={page}
+                totalPages={totalPages}
+                previousPage={previousPage}
+                nextPage={nextPage}
+                onPrevious={() => setPage(page - 1)}
+                onNext={() => setPage(page + 1)}
+              />
+            </>
           )}
-        </>
-      )}
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

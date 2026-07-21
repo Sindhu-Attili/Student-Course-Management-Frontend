@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
 import api from "../services/api";
+
+import PageHeader from "../components/PageHeader";
+import SearchBar from "../components/SearchBar";
+import LoadingSpinner from "../components/LoadingSpinner";
+import EmptyState from "../components/EmptyState";
+import PaginationControls from "../components/PaginationControls";
 
 function Certificates() {
   const [certificates, setCertificates] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [ordering, setOrdering] = useState("");
-
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
@@ -34,14 +38,8 @@ function Certificates() {
       setCount(response.data.count);
       setNextPage(response.data.next);
       setPreviousPage(response.data.previous);
-
     } catch (error) {
       console.log(error);
-
-      if (error.response) {
-        console.log("Status:", error.response.status);
-        console.log("Data:", error.response.data);
-      }
     } finally {
       setLoading(false);
     }
@@ -58,128 +56,157 @@ function Certificates() {
   const totalPages = Math.ceil(count / 5);
 
   return (
-    <div className="container mt-5">
+    <div className="container-fluid p-4">
 
-      <h2 className="text-center mb-4">Certificates</h2>
+      <PageHeader
+        title="Certificates"
+        subtitle="Manage student certificates."
+        icon="bi-award"
+      />
 
-      {/* Search */}
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="🔍 Search Certificates..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setPage(1);
-          }}
-        />
-      </div>
+      {/* Search & Sort */}
+      <div className="card shadow-sm border-0 rounded-4 mb-4">
+        <div className="card-body">
 
-      {/* Sorting */}
-      <div className="mb-4">
-        <select
-          className="form-select"
-          value={ordering}
-          onChange={(e) => {
-            setOrdering(e.target.value);
-            setPage(1);
-          }}
-        >
-          <option value="">Sort By</option>
-          <option value="issued_at">Issued Date (Oldest First)</option>
-          <option value="-issued_at">Issued Date (Newest First)</option>
-          <option value="certificate_number">
-            Certificate No (Ascending)
-          </option>
-          <option value="-certificate_number">
-            Certificate No (Descending)
-          </option>
-        </select>
-      </div>
+          <div className="row g-3">
 
-      {/* Loading */}
-      {loading ? (
-        <div
-          className="d-flex justify-content-center align-items-center"
-          style={{ height: "300px" }}
-        >
-          <div className="text-center">
-            <Spinner animation="border" variant="primary" />
-            <p className="mt-3">Loading Certificates...</p>
+            <div className="col-md-8">
+              <SearchBar
+                value={searchTerm}
+                placeholder="Search Certificates..."
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPage(1);
+                }}
+              />
+            </div>
+
+            <div className="col-md-4">
+              <select
+                className="form-select"
+                style={{ height: "50px" }}
+                value={ordering}
+                onChange={(e) => {
+                  setOrdering(e.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value="">Sort By</option>
+
+                <option value="issued_at">
+                  Issued Date (Oldest First)
+                </option>
+
+                <option value="-issued_at">
+                  Issued Date (Newest First)
+                </option>
+
+                <option value="certificate_number">
+                  Certificate No (Ascending)
+                </option>
+
+                <option value="-certificate_number">
+                  Certificate No (Descending)
+                </option>
+
+              </select>
+            </div>
+
           </div>
+
         </div>
-      ) : (
-        <>
-          {/* Certificate Cards */}
-          <div className="row">
-            {certificates.length > 0 ? (
-              certificates.map((certificate) => (
-                <div className="col-md-4 mb-4" key={certificate.id}>
-                  <div className="card shadow-sm h-100">
-                    <div className="card-body">
+      </div>
 
-                      <h5 className="card-title text-center">
-                        🏆 Certificate
-                      </h5>
+      {/* Certificate Cards */}
+      <div className="card shadow-sm border-0 rounded-4">
+        <div className="card-body">
 
-                      <p>
-                        <strong>Certificate No:</strong>{" "}
-                        {certificate.certificate_number}
-                      </p>
+          {loading ? (
+            <LoadingSpinner text="Loading Certificates..." />
+          ) : certificates.length === 0 ? (
+            <EmptyState
+              icon="bi-award"
+              title="No Certificates Found"
+              message="Try changing your search or sorting options."
+            />
+          ) : (
+            <>
+              <div className="row">
 
-                      <p>
-                        <strong>Issued Date:</strong>{" "}
-                        {certificate.issued_at.substring(0, 10)}
-                      </p>
+                {certificates.map((certificate) => (
+                  <div
+                    className="col-lg-4 col-md-6 mb-4"
+                    key={certificate.id}
+                  >
+                    <div className="card border-0 shadow-sm h-100 rounded-4 course-card">
 
-                      <p>
-                        <strong>Student ID:</strong> {certificate.student}
-                      </p>
+                      <div className="card-body">
 
-                      <p>
-                        <strong>Course ID:</strong> {certificate.course}
-                      </p>
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+
+                          <h5 className="fw-bold mb-0">
+                            Certificate
+                          </h5>
+
+                          <span className="badge bg-warning text-dark">
+                            Issued
+                          </span>
+
+                        </div>
+
+                        <hr />
+
+                        <p className="mb-2">
+                          <i className="bi bi-patch-check me-2 text-success"></i>
+
+                          <strong>No:</strong>{" "}
+                          {certificate.certificate_number}
+                        </p>
+
+                        <p className="mb-2">
+                          <i className="bi bi-calendar-event me-2 text-primary"></i>
+
+                          <strong>Issued:</strong>{" "}
+                          {certificate.issued_at.substring(0, 10)}
+                        </p>
+
+                        <p className="mb-2">
+                          <i className="bi bi-person me-2 text-info"></i>
+
+                          <strong>Student ID:</strong>{" "}
+                          {certificate.student}
+                        </p>
+
+                        <p className="mb-0">
+                          <i className="bi bi-book me-2 text-danger"></i>
+
+                          <strong>Course ID:</strong>{" "}
+                          {certificate.course}
+                        </p>
+
+                      </div>
 
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-center">
-                <h5>No Certificates Found</h5>
+                ))}
+
               </div>
-            )}
-          </div>
 
-          {/* Pagination */}
-          {certificates.length > 0 && (
-            <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
+              <PaginationControls
+                page={page}
+                totalPages={totalPages}
+                previousPage={previousPage}
+                nextPage={nextPage}
+                onPrevious={() => setPage(page - 1)}
+                onNext={() => setPage(page + 1)}
+              />
 
-              <button
-                className="btn btn-outline-primary"
-                disabled={!previousPage}
-                onClick={() => setPage(page - 1)}
-              >
-                ◀ Previous
-              </button>
-
-              <strong>
-                Page {page} of {totalPages}
-              </strong>
-
-              <button
-                className="btn btn-outline-primary"
-                disabled={!nextPage}
-                onClick={() => setPage(page + 1)}
-              >
-                Next ▶
-              </button>
-
-            </div>
+            </>
           )}
-        </>
-      )}
+
+        </div>
+      </div>
+
     </div>
   );
 }

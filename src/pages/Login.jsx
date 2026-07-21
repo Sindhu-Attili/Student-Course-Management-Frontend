@@ -2,15 +2,20 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../services/api";
+import "../styles/login.css";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setLoading(true);
 
     try {
       const response = await api.post("token/", {
@@ -35,25 +40,49 @@ function Login() {
       }
 
       console.error(error);
+
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-4">
+    <div className="login-page">
 
-          <h2 className="text-center mb-4">Login</h2>
+      <div className="login-card">
 
-          <form onSubmit={handleSubmit}>
+        <div className="login-header">
 
-            <div className="mb-3">
-              <label className="form-label">Username</label>
+          <div className="login-logo">
+            <i className="bi bi-mortarboard-fill"></i>
+          </div>
+
+          <h1>Student LMS</h1>
+
+          <p>
+            Student Course Management System
+          </p>
+
+        </div>
+
+        <form onSubmit={handleSubmit}>
+
+          <div className="mb-4">
+
+            <label className="form-label">
+              Username
+            </label>
+
+            <div className="input-group">
+
+              <span className="input-group-text">
+                <i className="bi bi-person"></i>
+              </span>
 
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter username"
+                placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -61,31 +90,76 @@ function Login() {
 
             </div>
 
-            <div className="mb-3">
-              <label className="form-label">Password</label>
+          </div>
+
+          <div className="mb-4">
+
+            <label className="form-label">
+              Password
+            </label>
+
+            <div className="input-group">
+
+              <span className="input-group-text">
+                <i className="bi bi-lock"></i>
+              </span>
 
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="form-control"
-                placeholder="Enter password"
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
 
+              <button
+                type="button"
+                className="btn btn-light border"
+                onClick={() =>
+                  setShowPassword(!showPassword)
+                }
+              >
+                <i
+                  className={`bi ${
+                    showPassword
+                      ? "bi-eye-slash"
+                      : "bi-eye"
+                  }`}
+                ></i>
+              </button>
+
             </div>
 
-            <button
-              type="submit"
-              className="btn btn-primary w-100"
-            >
-              Login
-            </button>
+          </div>
 
-          </form>
+          <button
+            className="btn login-btn"
+            type="submit"
+            disabled={loading}
+          >
 
-        </div>
+            {loading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                ></span>
+
+                Signing In...
+              </>
+            ) : (
+              <>
+                Sign In
+                <i className="bi bi-arrow-right ms-2"></i>
+              </>
+            )}
+
+          </button>
+
+        </form>
+
       </div>
+
     </div>
   );
 }
