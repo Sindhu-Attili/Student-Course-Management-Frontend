@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "../styles/sidebar.css";
+import "../Styles/sidebar.css";
 
 function Sidebar() {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../services/api";
-import "../styles/login.css";
+import "../Styles/login.css";
 
 function Login() {
   const [username, setUsername] = useState("");

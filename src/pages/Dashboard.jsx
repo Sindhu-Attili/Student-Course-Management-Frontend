@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import api from "../services/api";
 import StatCard from "../components/StatCard";
-import "../styles/dashboard.css";
+import "../Styles/dashboard.css";
 
 function Dashboard() {
   const navigate = useNavigate();
