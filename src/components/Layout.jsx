@@ -1,4 +1,4 @@
-import SideBar from "./SideBar";
+import Sidebar from "./SideBar";
 import "../Styles/layout.css";
 
 function Layout({ children }) {
