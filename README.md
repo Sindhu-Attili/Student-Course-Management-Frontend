@@ -14,37 +14,37 @@
 
 ## 🔐 Login Page
 
-![Login](Screenshots\login-page.png)
+![Login](Screenshots/login-page.png)
 
 ---
 
 ## 📊 Dashboard
 
-![Dashboard](Screenshots\dashboard.png)
+![Dashboard](Screenshots/dashboard.png)
 
 ---
 
 ## 📚 Courses
 
-![Courses](Screenshots\courses.png)
+![Courses](Screenshots/courses.png)
 
 ---
 
 ## 📝 Assignments
 
-![Assignments](Screenshots\assignments.png)
+![Assignments](Screenshots/assignments.png)
 
 ---
 
 ## 💳 Payments
 
-![Payments](Screenshots\payments.png)
+![Payments](Screenshots/payments.png)
 
 ---
 
 ## 🏆 Certificates
 
-![Certificates](Screenshots\certificates.png)
+![Certificates](Screenshots/certificates.png)
 
 ---
 
