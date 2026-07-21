@@ -1,52 +1,58 @@
 # 🎓 Student Course Management System - Frontend
 
-A modern and responsive frontend for the **Student Course Management System**, built using **React** and **Vite**. The application provides a clean user interface for managing courses, assignments, payments, certificates, and dashboard analytics with secure JWT authentication.
+<p align="center">
+  <h3 align="center">A Modern Student Course Management System built with React & Vite</h3>
+
+  <p align="center">
+    Manage Courses, Assignments, Payments and Certificates with a clean and responsive user interface.
+  </p>
+</p>
 
 ---
 
-## 📸 Application Screenshots
+# 📸 Application Preview
 
-### 🔐 Login Page
+## 🔐 Login Page
 
-![Login](Screenshots/login-page.png)
-
----
-
-### 📊 Dashboard
-
-![Dashboard](Screenshots/dashboard.png)
+![Login](Screenshots\login-page.png)
 
 ---
 
-### 📚 Courses
+## 📊 Dashboard
 
-![Courses](Screenshots/courses.png)
-
----
-
-### 📝 Assignments
-
-![Assignments](Screenshots/assignments.png)
+![Dashboard](Screenshots\dashboard.png)
 
 ---
 
-### 💳 Payments
+## 📚 Courses
 
-![Payments](Screenshots/payments.png)
-
----
-
-### 🏆 Certificates
-
-![Certificates](Screenshots/certificates.png)
+![Courses](Screenshots\courses.png)
 
 ---
 
-## ✨ Features
+## 📝 Assignments
+
+![Assignments](Screenshots\assignments.png)
+
+---
+
+## 💳 Payments
+
+![Payments](Screenshots\payments.png)
+
+---
+
+## 🏆 Certificates
+
+![Certificates](Screenshots\certificates.png)
+
+---
+
+# ✨ Features
 
 - 🔐 JWT Authentication
 - 🛡 Protected Routes
-- 📊 Dashboard Statistics
+- 📊 Dashboard Overview
 - 📚 Course Management
 - 📝 Assignment Management
 - 💳 Payment Management
@@ -56,34 +62,33 @@ A modern and responsive frontend for the **Student Course Management System**, b
 - 📄 Pagination
 - 📱 Responsive Design
 - 🎨 Modern UI
-- ♻️ Reusable Components
+- ♻️ Reusable React Components
 - 🔔 Toast Notifications
 
 ---
 
-## 🛠 Tech Stack
+# 🛠 Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| React | Frontend Library |
-| Vite | Build Tool |
-| React Router DOM | Routing |
-| Axios | API Communication |
-| Bootstrap 5 | UI Components |
-| Bootstrap Icons | Icons |
-| React Toastify | Notifications |
+- React
+- Vite
+- React Router DOM
+- Axios
+- Bootstrap 5
+- Bootstrap Icons
+- React Toastify
 
 ---
 
-## 📁 Folder Structure
+# 📂 Project Structure
 
 ```text
-src/
+src
 │
-├── components/
-├── pages/
-├── services/
-├── styles/
+├── assets
+├── components
+├── pages
+├── services
+├── styles
 │
 ├── App.jsx
 ├── main.jsx
@@ -92,21 +97,21 @@ src/
 
 ---
 
-## 🚀 Getting Started
+# 🚀 Installation
 
-### Clone the repository
+Clone the repository
 
 ```bash
-git clone <your-frontend-repository-url>
+git clone https://github.com/Sindhu-Attili/student-course-management-frontend.git
 ```
 
-### Install dependencies
+Install dependencies
 
 ```bash
 npm install
 ```
 
-### Start development server
+Run the project
 
 ```bash
 npm run dev
@@ -114,19 +119,19 @@ npm run dev
 
 ---
 
-## 🔐 Authentication
+# 🔐 Authentication
 
-The application uses **JWT Authentication**.
+This project uses **JWT Authentication**.
 
 After successful login:
 
 - Access Token is stored in Local Storage
 - Refresh Token is stored in Local Storage
-- Protected Routes prevent unauthorized access
+- Protected Routes restrict unauthorized access
 
 ---
 
-## 📦 Modules
+# 📦 Modules
 
 - Login
 - Dashboard
@@ -137,32 +142,38 @@ After successful login:
 
 ---
 
-## 🎨 UI Highlights
+# 🎨 UI Highlights
 
-- Modern Login Screen
-- Gradient Background
-- Dashboard Cards
+- Beautiful Gradient UI
 - Responsive Sidebar
-- Search & Sorting
+- Dashboard Analytics
+- Search & Sort
 - Pagination
-- Smooth Hover Effects
-- Consistent Card Design
+- Interactive Cards
+- Modern Login Screen
+- Clean User Experience
 
 ---
 
-## 🔮 Future Enhancements
+# 🔮 Future Enhancements
 
 - User Profile
-- Profile Picture Upload
 - Dark Mode
 - Charts & Analytics
 - Notifications
+- File Upload
 - Role-Based Authentication
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 **Satya Sindhu**
 
 Python Full Stack Developer
+
+GitHub: https://github.com/Sindhu-Attili
+
+---
+
+⭐ If you like this project, don't forget to star the repository.
