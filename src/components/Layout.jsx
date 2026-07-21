@@ -1,11 +1,11 @@
-import Sidebar from "./SideBar";
+import SideBar from "./SideBar";
 import "../Styles/layout.css";
 
 function Layout({ children }) {
   return (
     <div className="layout-container">
-      {/* Sidebar */}
-      <Sidebar />
+      {/* SideBar */}
+      <SideBar />
 
       {/* Main Content */}
       <main className="layout-content">
